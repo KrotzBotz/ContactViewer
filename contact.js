@@ -1,22 +1,20 @@
-// each contact is a string: name|email|phone
+"use strict";
+
 const contacts = [
-    "Anne Jones|ajones@example.com|555-555-1234",
-    "Mike Smith|msmith@example.com|555-555-5678",
-    "Sara Lee|slee@example.com|555-555-9012",
-    "Carlos Diaz|cdiaz@example.com|555-555-3456",
-    "Tina Brown|tbrown@example.com|555-555-7890"
+    "1|Scott|scott@murach.com|1-559-555-5555",
+    "2|Joel|joel@murach.com|1-409-555-5555",
+    "3|Mike|mike@murach.com|1-363-555-5555"
 ];
 
-const MENU = "COMMAND MENU\n" +
-    "list - Display all contacts\n" +
-    "get # - Display one contact by its number\n" +
-    "exit - Exit the program";
+const menuString = "COMMAND MENU\n" +
+    "list - List all contacts\n" +
+    "get # - Get contact with the specified number\n" +
+    "exit - Exit program";
 
-const startBtn = document.getElementById("startBtn");
 const menuBox = document.getElementById("menu");
 const logBox = document.getElementById("log");
 
-menuBox.textContent = MENU;
+menuBox.textContent = menuString;
 
 // show a message in an alert box and also add it to the history on the page
 function show(message) {
@@ -29,25 +27,26 @@ function listContacts() {
     let message = "CONTACT LIST";
     for (let i = 0; i < contacts.length; i++) {
         const fields = contacts[i].split("|");
-        message += "\n" + (i + 1) + ". " + fields[0];
+        message += "\n" + fields[0] + ". " + fields[1];
     }
     return message;
 }
 
 // build the text for the get command
 function getContact(number) {
-    const index = number - 1;
-    if (isNaN(index) || index < 0 || index >= contacts.length) {
-        return "Contact not found. Please enter a number from 1 to " + contacts.length + ".";
+    for (let i = 0; i < contacts.length; i++) {
+        const fields = contacts[i].split("|");
+        if (Number(fields[0]) === number) {
+            return "CONTACT " + fields[0] + "\nName: " + fields[1] +
+                "\nEmail: " + fields[2] + "\nPhone: " + fields[3];
+        }
     }
-    const fields = contacts[index].split("|");
-    return "CONTACT " + number + "\nName: " + fields[0] +
-        "\nEmail: " + fields[1] + "\nPhone: " + fields[2];
+    return "Contact not found.";
 }
 
 function runViewer() {
     while (true) {
-        const input = prompt(MENU + "\n\nEnter a command:");
+        const input = prompt(menuString + "\n\nEnter a command:");
 
         // clicking Cancel gives back null
         if (input === null) {
@@ -75,4 +74,4 @@ function runViewer() {
     show("Goodbye!");
 }
 
-startBtn.addEventListener("click", runViewer);
+runViewer();
